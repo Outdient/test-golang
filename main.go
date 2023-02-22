@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strconv"
+	"strings"
 )
 
 func summa(a, b int) int {
@@ -46,17 +49,24 @@ func rimch(s string) string {
 
 func main() {
 
-	var chislo1 string
+	reader := bufio.NewReader(os.Stdin)
+
 	var oper string
-	var chislo2 string
+
 	for {
 		prover1 = 0
 		fmt.Println("Ведите мат. операцию")
-		fmt.Scan(&chislo1, &oper, &chislo2)
-		chislo1 = rimch(chislo1)
-		chislo2 = rimch(chislo2)
-		ch1, _ := strconv.Atoi(chislo1)
-		ch2, _ := strconv.Atoi(chislo2)
+		text, _ := reader.ReadString('\n')
+		words := strings.Fields(text)
+		if len(words) != 3 {
+			fmt.Println("Не является мат. операцией")
+			break
+		}
+		oper = words[1]
+		words[0] = rimch(words[0])
+		words[2] = rimch(words[2])
+		ch1, _ := strconv.Atoi(words[0])
+		ch2, _ := strconv.Atoi(words[2])
 		if ch1 < 1 || ch1 > 10 || ch2 < 1 || ch2 > 10 {
 			fmt.Println("Неверное значение чисел")
 			break
@@ -71,10 +81,10 @@ func main() {
 			} else if oper == "-" {
 				razpol := razn(ch1, ch2)
 				if razpol < 1 {
-					fmt.Println("В римской системе нет отрецательных чисел")
+					fmt.Println("В римской системе нет отрицательных чисел")
 					break
 				}
-				fmt.Println("Разница равна", roman[razpol-1])
+				fmt.Println("Разница равна", roman[razn(ch1, ch2)-1])
 			} else if oper == "*" {
 				fmt.Println("Произведение равно", roman[proiz(ch1, ch2)-1])
 			} else if oper == "/" {
